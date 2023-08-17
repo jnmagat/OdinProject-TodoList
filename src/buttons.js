@@ -50,33 +50,63 @@ function addBtnModal (a,b) {
     }
 
     else{
+        console.log('add todo here');
+
         let modal_text = document.createElement('h2');
         let header_line = document.createElement('hr');
         let input_label_name = document.createElement('label');
         let input_name = document.createElement('input');
+        let input_label_description = document.createElement('label');
+        let input_description = document.createElement('input');
+        let input_label_dueDate = document.createElement('label');
+        let input_dueDate = document.createElement('input');
+        let input_label_priority = document.createElement('label');
+        let input_priority = document.createElement('input');
 
         modal_text.innerHTML = "Todo Details";
 
         // input name
-        input_label_name.innerHTML = "Todo Title";
+        input_label_name.innerHTML = "Title";
         input_name.setAttribute("type","text");
         modalDiv.appendChild(modal_text);
         modalDiv.appendChild(header_line);
         modalDiv.appendChild(input_label_name);
         modalDiv.appendChild(input_name);
 
+        input_label_description.innerHTML = "Description";
+        input_description.setAttribute("type","text");
+        modalDiv.appendChild(input_label_description);
+        modalDiv.appendChild(input_description);
+
+        input_label_dueDate.innerHTML = "Due Date";
+        input_dueDate.setAttribute("type","text");
+        modalDiv.appendChild(input_label_dueDate);
+        modalDiv.appendChild(input_dueDate);
+
+        input_label_priority.innerHTML = "Priority";
+        input_priority.setAttribute("type","text");
+        modalDiv.appendChild(input_label_priority);
+        modalDiv.appendChild(input_priority);
+
         modal_submit_btn.addEventListener('click', function(){
             
             backdrop.classList.toggle("show");
             modalDiv.classList.toggle("show");
+            let result = getFolder() ? getFolder() : ""
             createTodo(
-                'b',
-                'b',
-                'b',
-                2,
-                getFolder()
+                input_name.value,
+                input_description.value,
+                input_dueDate.value,
+                input_priority.value,
+                result
             );
+            console.log(result);
             appendTodos(getFolder());
+            
+            input_name.value = "";
+            input_description.value = "";
+            input_dueDate.value = "";
+            input_priority.value = "";
         });
     
     }
