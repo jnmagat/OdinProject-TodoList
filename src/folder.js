@@ -31,4 +31,17 @@ function getFolder(){
     return selected_folder;
 }
 
-export {Folder, createFolder,setFolder,getFolder}
+function checkFolder(folder_name){
+    let val = 0;
+    todoDependencies.folders.forEach(function(currentFolder){
+        if(folder_name == currentFolder.name || folder_name == ""){
+            val = 0;
+        }
+        else{
+            val = 1;
+        }
+    });
+    return val;
+}
+
+export {Folder, createFolder,setFolder,getFolder,checkFolder}

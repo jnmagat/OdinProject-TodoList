@@ -14,22 +14,12 @@ let todoDependencies = (function(){
     }
 
 })()
-
-let newFolder = new Folder("Test");
-createFolder(newFolder);
-
+    
 createTodo(
     'Title Test',
     'random desc',
-    '',
+    '2023-08-01',
     2
-);
-createTodo(
-    'a',
-    'a',
-    'a',
-    2,
-    "Test"
 );
 
 createinitPage();

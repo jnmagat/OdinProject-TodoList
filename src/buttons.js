@@ -42,16 +42,21 @@ function addBtnModal (a,b) {
         modalDiv.appendChild(input_name);
 
         modal_submit_btn.addEventListener('click', function(){
-            backdrop.classList.toggle("show");
-            modalDiv.classList.toggle("show");
-            appendFolder(input_name.value);
+            if(input_name.value == ""){
+                alert("Fill up the field");
+            }
+            else{
+                backdrop.classList.toggle("show");
+                modalDiv.classList.toggle("show");
+                appendFolder(input_name.value);
+                input_name.value = "";
+            }
         });
     
     }
 
     else{
-        console.log('add todo here');
-
+        // console.log('add todo here');
         let modal_text = document.createElement('h2');
         let header_line = document.createElement('hr');
         let input_label_name = document.createElement('label');
@@ -79,34 +84,43 @@ function addBtnModal (a,b) {
         modalDiv.appendChild(input_description);
 
         input_label_dueDate.innerHTML = "Due Date";
-        input_dueDate.setAttribute("type","text");
+        input_dueDate.setAttribute("type","date");
         modalDiv.appendChild(input_label_dueDate);
         modalDiv.appendChild(input_dueDate);
 
         input_label_priority.innerHTML = "Priority";
-        input_priority.setAttribute("type","text");
+        input_priority.setAttribute("type","number");
+        input_priority.setAttribute("min",0);
+        input_priority.setAttribute("max",1);
         modalDiv.appendChild(input_label_priority);
         modalDiv.appendChild(input_priority);
 
         modal_submit_btn.addEventListener('click', function(){
-            
-            backdrop.classList.toggle("show");
-            modalDiv.classList.toggle("show");
+           
             let result = getFolder() ? getFolder() : ""
-            createTodo(
-                input_name.value,
-                input_description.value,
-                input_dueDate.value,
-                input_priority.value,
-                result
-            );
+            if(input_name.value == ""|| input_description.value == "" ||
+            input_dueDate.value == "" || input_priority.value == "" || input_priority.value > 1 ){
+                alert("Check Inputs ");
+            }
+            else{
+                createTodo(
+                    input_name.value,
+                    input_description.value,
+                    input_dueDate.value,
+                    input_priority.value,
+                    result
+                );
+                backdrop.classList.toggle("show");
+                modalDiv.classList.toggle("show");
+                 
+                input_name.value = "";
+                input_description.value = "";
+                input_dueDate.value = "";
+                input_priority.value = "";   
+            }
             console.log(result);
             appendTodos(getFolder());
             
-            input_name.value = "";
-            input_description.value = "";
-            input_dueDate.value = "";
-            input_priority.value = "";
         });
     
     }
@@ -137,7 +151,6 @@ function addBtnModal (a,b) {
 
    
 }
-
 
 
 export { addBtnModal };

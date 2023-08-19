@@ -1,5 +1,5 @@
 import { todoDependencies } from "./index.js";
-import { Folder,createFolder,setFolder } from "./folder.js";
+import { Folder,createFolder,setFolder,checkFolder } from "./folder.js";
 
 let divContent = document.querySelector("#content");
 import { addBtnModal } from "./buttons.js";
@@ -12,6 +12,7 @@ let main_panel = document.createElement('div');
 let left_panel = document.createElement('div');
 let right_panel = document.createElement('div');
 let sidebar_title = document.createElement('h2');
+sidebar_title.setAttribute("class","projects_title");
 let project_list = document.createElement("ul");
 project_list.setAttribute("class","project_list");
 
@@ -110,18 +111,24 @@ const createinitPage = () =>{
 // }
 
 function appendFolder(folder_name){
-        let newFolder = new Folder(folder_name);
-        createFolder(newFolder);
-        let project_list_item = document.createElement("li");
-        project_list_item.setAttribute("id","project");
-        project_list_item.innerHTML = folder_name;
-        project_list.appendChild(project_list_item);
-        project_list_item.addEventListener('click',function(){
-                setFolder(project_list_item.innerHTML);
-                clearDisplay();
-                appendTodos(project_list_item.innerHTML);
-                current_loaded_todos = project_list_item.innerHTML;
-        });
+        if(checkFolder(folder_name)==0){
+
+        }
+        else{
+            let newFolder = new Folder(folder_name);
+            createFolder(newFolder);
+            let project_list_item = document.createElement("li");
+            project_list_item.setAttribute("id","project");
+            project_list_item.innerHTML = folder_name;
+            project_list.appendChild(project_list_item);
+            project_list_item.addEventListener('click',function(){
+                    setFolder(project_list_item.innerHTML);
+                    clearDisplay();
+                    appendTodos(project_list_item.innerHTML);
+                    current_loaded_todos = project_list_item.innerHTML;
+            });
+        }
+        
 
 }
 
@@ -155,7 +162,7 @@ function appendTodos(folder_name){
     if(folder_name === undefined){
         folder_name = "Default";
     }
-    console.log("Folder Name: "+ folder_name);
+    // console.log("Folder Name: "+ folder_name);
     clearDisplay();
     todoDependencies.folders.forEach(function(currentFolder){
         if(currentFolder.name == folder_name){
@@ -169,7 +176,7 @@ function appendTodos(folder_name){
             }
             currentFolder.todos.forEach(function(currentTodo){
 
-                console.log(currentTodo.title);
+                // console.log(currentTodo.title);
                 
                 add_todo_btn.innerHTML = "+ Add Todo";
                 add_todo_btn.setAttribute("class","add_todo_btn");
@@ -201,7 +208,7 @@ function appendTodos(folder_name){
             
         }
     }); 
-    console.log(todoDependencies.folders);
+    // console.log(todoDependencies.folders);
 } 
 
 right_panel.appendChild(add_todo_btn);
