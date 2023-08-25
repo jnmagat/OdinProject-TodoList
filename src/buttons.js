@@ -1,7 +1,9 @@
 import { Folder,createFolder,getFolder } from "./folder.js";
-import { appendFolder,appendTodos } from "./display.js";
-import { createTodo } from "./todo.js";
+import { appendFolder,appendTodos,clearDisplay,appendEditTodo } from "./display.js";
+import { createTodo,deleteTodo,getTodo } from "./todo.js";
 import { todoDependencies } from "./index.js";
+
+
 function addBtnModal (a,b) {
     // create Modal
     let backdrop = document.createElement('div');
@@ -12,7 +14,7 @@ function addBtnModal (a,b) {
     let modalDiv = document.createElement('div');
     modalDiv.setAttribute("class","modalDiv");
 
-    let btn = b.getAttribute("class")
+    let btn = b.getAttribute("class");
     // console.log(btn);
     
      // modal close button
@@ -54,7 +56,6 @@ function addBtnModal (a,b) {
         });
     
     }
-
     else{
         // console.log('add todo here');
         let modal_text = document.createElement('h2');
@@ -149,8 +150,41 @@ function addBtnModal (a,b) {
         modalDiv.classList.toggle("show");
     });
 
+
    
 }
 
+function delBtn(b,c){
+    let folder_selected;
 
-export { addBtnModal };
+        if(getFolder()){
+            folder_selected = getFolder();
+        }
+        else{
+            folder_selected = "Default";
+        }
+        b.addEventListener('click', function(){
+            deleteTodo(folder_selected,c);
+            
+        clearDisplay()
+        appendTodos(getFolder());
+
+        });
+}
+
+function editBtn(b,c){
+    let folder_selected;
+
+    if(getFolder()){
+        folder_selected = getFolder();
+    }
+    else{
+        folder_selected = "Default";
+    }
+    b.addEventListener('click', function(){
+        getTodo(folder_selected,c);
+        appendEditTodo(c);
+    });
+}
+
+export { addBtnModal,delBtn,editBtn };

@@ -2,7 +2,7 @@ import { todoDependencies } from "./index.js";
 import { Folder,createFolder,setFolder,checkFolder } from "./folder.js";
 
 let divContent = document.querySelector("#content");
-import { addBtnModal } from "./buttons.js";
+import { addBtnModal,delBtn,editBtn } from "./buttons.js";
 import { createTodo } from "./todo.js";
 
 
@@ -30,6 +30,8 @@ let th_duedate = document.createElement("th");
 th_duedate.innerHTML = "Due Date";
 let th_priority = document.createElement("th");
 th_priority.innerHTML = "Priority";
+let th_action = document.createElement("th");
+th_action.innerHTML = "";
 
 let todo_tbody = document.createElement("tbody");
 let todo_tb_header = document.createElement("th");
@@ -43,9 +45,12 @@ let add_todo_btn = document.createElement('button');
 addBtnModal(divContent,add_todo_btn);
 let current_loaded_todos;
 
+let Btn_id = 0 ;
+let folder_name = "default";
 
 
 const createinitPage = () =>{
+    folder_name = "default";
     // NAV SECTION
     nav.setAttribute("class","nav_todo");
     nav_title.innerHTML = "() => Todolist App";
@@ -77,6 +82,7 @@ const createinitPage = () =>{
     th_thead_row.appendChild(th_desc);
     th_thead_row.appendChild(th_duedate);
     th_thead_row.appendChild(th_priority);
+    th_thead_row.appendChild(th_action);
     todo_thead.appendChild(todo_tb_header);
     todo_table.appendChild(todo_tbody);
     // todo_tbody.appendChild(todo_tb_row);
@@ -109,29 +115,6 @@ const createinitPage = () =>{
 // function createtodoElements(){
     
 // }
-
-function appendFolder(folder_name){
-        if(checkFolder(folder_name)==0){
-
-        }
-        else{
-            let newFolder = new Folder(folder_name);
-            createFolder(newFolder);
-            let project_list_item = document.createElement("li");
-            project_list_item.setAttribute("id","project");
-            project_list_item.innerHTML = folder_name;
-            project_list.appendChild(project_list_item);
-            project_list_item.addEventListener('click',function(){
-                    setFolder(project_list_item.innerHTML);
-                    clearDisplay();
-                    appendTodos(project_list_item.innerHTML);
-                    current_loaded_todos = project_list_item.innerHTML;
-            });
-        }
-        
-
-}
-
 function clearDisplay(){
     let current_tr = document.querySelectorAll(".tr_todos");
     let current_name = document.querySelectorAll('#todo_name');
@@ -158,58 +141,142 @@ function clearDisplay(){
     }
 }
 
+function appendFolder(folder_name){
+        if(checkFolder(folder_name)==0){
+
+        }
+        else{
+            let newFolder = new Folder(folder_name);
+            createFolder(newFolder);
+            let project_list_item = document.createElement("li");
+            project_list_item.setAttribute("id","project");
+            project_list_item.innerHTML = folder_name;
+            project_list.appendChild(project_list_item);
+            project_list_item.addEventListener('click',function(){
+                    setFolder(project_list_item.innerHTML);
+                    clearDisplay();
+                    appendTodos(project_list_item.innerHTML);
+                    current_loaded_todos = project_list_item.innerHTML;
+            });
+        }
+        
+
+}
+
+
 function appendTodos(folder_name){
+    // console.log(folder_name);
     if(folder_name === undefined){
         folder_name = "Default";
     }
-    // console.log("Folder Name: "+ folder_name);
     clearDisplay();
     todoDependencies.folders.forEach(function(currentFolder){
+        
         if(currentFolder.name == folder_name){
-            if(currentFolder.todos.length==0){
-                // if empty folder
-                 name_currentTodo.innerHTML = "";
-                description_currentTodo.innerHTML = "";
-                dueDate_currentTodo.innerHTML = "";
-                priority_currentTodo.innerHTML = "";
-
-            }
-            currentFolder.todos.forEach(function(currentTodo){
-
-                // console.log(currentTodo.title);
-                
-                add_todo_btn.innerHTML = "+ Add Todo";
-                add_todo_btn.setAttribute("class","add_todo_btn");
-
-                let todo_tb_row = document.createElement("tr");
-                todo_tb_row.setAttribute("class","tr_todos");
-                let priority_currentTodo = document.createElement("td");
-                priority_currentTodo.setAttribute("id","todo_prio");
-                let dueDate_currentTodo = document.createElement("td");
-                dueDate_currentTodo.setAttribute("id","todo_duedate");
-                let description_currentTodo = document.createElement("td");
-                description_currentTodo.setAttribute("id","todo_desc");
-                let name_currentTodo = document.createElement("td");
-                name_currentTodo.setAttribute("id","todo_name");
-
-                // show todos based on selected folder
-                name_currentTodo.innerHTML = currentTodo.title;
-                description_currentTodo.innerHTML = currentTodo.description;
-                dueDate_currentTodo.innerHTML = currentTodo.dueDate;
-                priority_currentTodo.innerHTML = currentTodo.priority;
-                
-                // display elements for todos
-                todo_tbody.appendChild(todo_tb_row);
-                todo_tb_row.appendChild(name_currentTodo);
-                todo_tb_row.appendChild(description_currentTodo);
-                todo_tb_row.appendChild(dueDate_currentTodo);
-                todo_tb_row.appendChild(priority_currentTodo);
-            });
             
+            Btn_id = 0;
+                currentFolder.todos.forEach(function(currentTodo){
+
+                    if(currentFolder.todos.length==0){
+                        // if empty folder
+                        name_currentTodo.innerHTML = "";
+                        description_currentTodo.innerHTML = "";
+                        dueDate_currentTodo.innerHTML = "";
+                        priority_currentTodo.innerHTML = "";
+        
+                    }
+                    
+                    add_todo_btn.innerHTML = "+ Add Todo";
+                    add_todo_btn.setAttribute("class","add_todo_btn");
+    
+                    let todo_tb_row = document.createElement("tr");
+                    todo_tb_row.setAttribute("class","tr_todos");
+                    todo_tb_row.setAttribute("id",Btn_id);
+                    let priority_currentTodo = document.createElement("td");
+                    priority_currentTodo.setAttribute("id","todo_prio");
+                    let dueDate_currentTodo = document.createElement("td");
+                    dueDate_currentTodo.setAttribute("id","todo_duedate");
+                    let description_currentTodo = document.createElement("td");
+                    description_currentTodo.setAttribute("id","todo_desc");
+                    let name_currentTodo = document.createElement("td");
+                    name_currentTodo.setAttribute("id","todo_name");
+                    let todo_act = document.createElement("td");
+                    // todo_del_btn.setAttribute("id","");
+
+                    // DELETE BTN
+                    // delBtn_id = currentFolder.todos.length;
+                    let todo_del_btn = document.createElement("button");
+                    todo_del_btn.setAttribute("class","todo_del_btn");
+                    todo_del_btn.setAttribute("id",Btn_id);
+                    todo_del_btn.innerHTML = "DEL";
+    
+                    delBtn(todo_del_btn,Btn_id);  
+
+                      // DELETE BTN
+                    // delBtn_id = currentFolder.todos.length;
+                    let todo_edit_btn = document.createElement("button");
+                    todo_edit_btn.setAttribute("class","todo_edit_btn");
+                    todo_edit_btn.setAttribute("id",Btn_id);
+                    todo_edit_btn.innerHTML = "EDIT";
+    
+                    editBtn(todo_edit_btn,Btn_id);   
+
+                    // show todos based on selected folder
+                    name_currentTodo.innerHTML = currentTodo.title;
+                    description_currentTodo.innerHTML = currentTodo.description;
+                    dueDate_currentTodo.innerHTML = currentTodo.dueDate;
+                    priority_currentTodo.innerHTML = currentTodo.priority;
+                    
+                    // display elements for todos
+                    todo_tbody.appendChild(todo_tb_row);
+                    todo_tb_row.appendChild(name_currentTodo);
+                    todo_tb_row.appendChild(description_currentTodo);
+                    todo_tb_row.appendChild(dueDate_currentTodo);
+                    todo_tb_row.appendChild(priority_currentTodo);
+                    todo_tb_row.appendChild(todo_act);
+                    todo_act.appendChild(todo_del_btn);
+                    todo_act.appendChild(todo_edit_btn);
+                    // console.log(currentTodo);
+                    Btn_id++;
+                });            
         }
     }); 
     // console.log(todoDependencies.folders);
 } 
 
+function appendEditTodo(id){
+    let selected_elem = document.getElementById(id);
+    
+    let a = selected_elem.querySelector("#todo_name");
+    let b = selected_elem.querySelector("#todo_desc");
+    let c = selected_elem.querySelector("#todo_duedate");
+    let d = selected_elem.querySelector("#todo_prio");
+    // console.log(a);
+    let name_input = document.createElement("input");
+    name_input.setAttribute("value",a.innerHTML);
+    a.innerHTML = "";
+
+    let desc_input = document.createElement("input");
+    desc_input.setAttribute("value",b.innerHTML);
+    b.innerHTML = "";
+
+    let duedate_input = document.createElement("input");
+    duedate_input.setAttribute("type","date");
+    duedate_input.setAttribute("value",c.innerHTML);
+    c.innerHTML = "";
+
+    let prio_input = document.createElement("input");
+    prio_input.setAttribute("type","number");
+    prio_input.setAttribute("min",0);
+    prio_input.setAttribute("max",1);
+    prio_input.setAttribute("value",d.innerHTML);
+    d.innerHTML = "";
+
+    a.appendChild(name_input);      
+    b.appendChild(desc_input);
+    c.appendChild(duedate_input);
+    d.appendChild(prio_input);
+}
+
 right_panel.appendChild(add_todo_btn);
-export { createinitPage, appendFolder,appendTodos};
+export { createinitPage, appendFolder,appendTodos,clearDisplay,appendEditTodo};

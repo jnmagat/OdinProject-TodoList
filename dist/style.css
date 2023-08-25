@@ -150,13 +150,13 @@ input {
     text-align: center;
     padding: 0.2em 5em;
     /* width: 100%; */
-    min-width: 100px;
-    max-width: 100px;
+    min-width: 100%;
+    max-width: 100%;
 }
 
 /* Buttons */
 
-.add_todo_btn{
+.add_todo_btn{  
     margin: 20px 50px;
     padding:10px;
     background-color: #071952;
@@ -177,6 +177,29 @@ input {
     padding: 20px;
     transition: ease-in 0.2s;
 }
+
+.todo_del_btn{
+    padding: 10px;
+    border: none;
+    border-radius: 0.5em;
+    background-color: rgb(236, 48, 48);
+    color: white;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+    font-size:medium;
+}
+.todo_edit_btn{
+    padding: 10px;
+    border: none;
+    border-radius: 0.5em;
+    background-color: rgb(50, 107, 241);
+    color: white;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+    font-size:medium;
+}
+
+
 
 /* PROJECTS CSS */
 .project_list{
