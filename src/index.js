@@ -19,9 +19,8 @@ createTodo(
     'Title Test',
     'random desc',
     '2023-08-01',
-    2
+    1
 );
-
 createinitPage();
 
 

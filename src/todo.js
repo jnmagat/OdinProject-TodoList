@@ -1,5 +1,6 @@
 import {todoDependencies} from "./index.js";
 import { Folder } from "./folder.js";
+import { currentId } from "./display.js";
 
 
 
@@ -63,18 +64,20 @@ function deleteTodo(folder_name,id){
 }    
 
 function getTodo(folder_name,id){
+    // console.log("This is folder:"+folder_name);
     // console.log("This is id:"+id);
+
     todoDependencies.folders.forEach(function(currentFolder){
         if(folder_name == currentFolder.name){
            currentFolder.todos.forEach(function(currentTodo){
             if(currentTodo.todoId == id){
-
                 let selected_elem = document.getElementById(id);
-                selected_elem.classList.toggle("selected");
-                // elem.classList.add("test");
-                // console.log(elem);
-                // todo_selected.classList.remove("tr_todos");
-                // todo_selected.className.includes("test");
+                if(currentId == isNaN){
+                    selected_elem.classList.add("selected");
+                }
+                else{
+                    selected_elem.classList.remove("selected");
+                }
             }
            });
         }

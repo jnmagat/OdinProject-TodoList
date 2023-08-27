@@ -199,6 +199,11 @@ input {
     font-size:medium;
 }
 
+.edit{
+    background-color: green;
+    color: white;
+}
+
 
 
 /* PROJECTS CSS */

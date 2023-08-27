@@ -1,5 +1,5 @@
 import { Folder,createFolder,getFolder } from "./folder.js";
-import { appendFolder,appendTodos,clearDisplay,appendEditTodo } from "./display.js";
+import { appendFolder,appendTodos,clearDisplay,appendEditTodo,currentId } from "./display.js";
 import { createTodo,deleteTodo,getTodo } from "./todo.js";
 import { todoDependencies } from "./index.js";
 
@@ -173,6 +173,7 @@ function delBtn(b,c){
 }
 
 function editBtn(b,c){
+
     let folder_selected;
 
     if(getFolder()){
@@ -182,8 +183,8 @@ function editBtn(b,c){
         folder_selected = "Default";
     }
     b.addEventListener('click', function(){
-        getTodo(folder_selected,c);
-        appendEditTodo(c);
+            getTodo(folder_selected,c);
+            appendEditTodo(b,c);
     });
 }
 

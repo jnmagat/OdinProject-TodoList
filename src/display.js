@@ -1,9 +1,9 @@
 import { todoDependencies } from "./index.js";
-import { Folder,createFolder,setFolder,checkFolder } from "./folder.js";
+import { Folder,createFolder,setFolder,checkFolder, getFolder } from "./folder.js";
 
 let divContent = document.querySelector("#content");
 import { addBtnModal,delBtn,editBtn } from "./buttons.js";
-import { createTodo } from "./todo.js";
+import { createTodo, getTodo } from "./todo.js";
 
 
 let nav = document.createElement('nav');
@@ -47,6 +47,8 @@ let current_loaded_todos;
 
 let Btn_id = 0 ;
 let folder_name = "default";
+let onEdit = false;
+let currentId = isNaN;
 
 
 const createinitPage = () =>{
@@ -142,10 +144,10 @@ function clearDisplay(){
 }
 
 function appendFolder(folder_name){
-        if(checkFolder(folder_name)==0){
+        // if(checkFolder(folder_name)==0){
 
-        }
-        else{
+        // }
+        // else{
             let newFolder = new Folder(folder_name);
             createFolder(newFolder);
             let project_list_item = document.createElement("li");
@@ -158,13 +160,17 @@ function appendFolder(folder_name){
                     appendTodos(project_list_item.innerHTML);
                     current_loaded_todos = project_list_item.innerHTML;
             });
-        }
+        // }
         
 
 }
 
 
 function appendTodos(folder_name){
+    
+    onEdit = false;
+    currentId = isNaN;
+    
     // console.log(folder_name);
     if(folder_name === undefined){
         folder_name = "Default";
@@ -244,39 +250,90 @@ function appendTodos(folder_name){
     // console.log(todoDependencies.folders);
 } 
 
-function appendEditTodo(id){
-    let selected_elem = document.getElementById(id);
-    
-    let a = selected_elem.querySelector("#todo_name");
-    let b = selected_elem.querySelector("#todo_desc");
-    let c = selected_elem.querySelector("#todo_duedate");
-    let d = selected_elem.querySelector("#todo_prio");
-    // console.log(a);
-    let name_input = document.createElement("input");
-    name_input.setAttribute("value",a.innerHTML);
-    a.innerHTML = "";
+function appendEditTodo(btn,id){
+        let selected_elem = document.getElementById(id);
+            
+        let a = selected_elem.querySelector("#todo_name");
+        let b = selected_elem.querySelector("#todo_desc");
+        let c = selected_elem.querySelector("#todo_duedate");
+        let d = selected_elem.querySelector("#todo_prio");
 
-    let desc_input = document.createElement("input");
-    desc_input.setAttribute("value",b.innerHTML);
-    b.innerHTML = "";
+        let name_input = document.createElement("input");
+        name_input.setAttribute("class","input_edit");
+        let desc_input = document.createElement("input");
+        desc_input.setAttribute("class","input_edit");
+        let duedate_input = document.createElement("input");
+        duedate_input.setAttribute("class","input_edit");
+        let prio_input = document.createElement("input");
+        prio_input.setAttribute("class","input_edit");
 
-    let duedate_input = document.createElement("input");
-    duedate_input.setAttribute("type","date");
-    duedate_input.setAttribute("value",c.innerHTML);
-    c.innerHTML = "";
+            if(selected_elem.classList.contains("selected") && onEdit == false && currentId == isNaN){
+                // console.log(a);
+                name_input.setAttribute("value",a.innerHTML);
+                a.innerHTML = "";
 
-    let prio_input = document.createElement("input");
-    prio_input.setAttribute("type","number");
-    prio_input.setAttribute("min",0);
-    prio_input.setAttribute("max",1);
-    prio_input.setAttribute("value",d.innerHTML);
-    d.innerHTML = "";
+                desc_input.setAttribute("value",b.innerHTML);
+                b.innerHTML = "";
 
-    a.appendChild(name_input);      
-    b.appendChild(desc_input);
-    c.appendChild(duedate_input);
-    d.appendChild(prio_input);
+                duedate_input.setAttribute("type","date");
+                duedate_input.setAttribute("value",c.innerHTML);
+                c.innerHTML = "";
+
+                prio_input.setAttribute("type","number");
+                prio_input.setAttribute("min",0);
+                prio_input.setAttribute("max",1);
+                prio_input.setAttribute("value",d.innerHTML);
+                d.innerHTML = "";
+
+                a.appendChild(name_input);      
+                b.appendChild(desc_input);
+                c.appendChild(duedate_input);
+                d.appendChild(prio_input);
+
+                currentId = id;
+                onEdit = true;
+                btn.classList.add("edit");
+                btn.innerHTML = "SAVE";
+            }
+            else{
+                if(onEdit == true && (currentId == id) ){
+                    let empty_arr= [];    
+                    let current_inputs = document.querySelectorAll('.input_edit');
+                        if(current_inputs){
+                            current_inputs.forEach(function(element) {
+                                empty_arr.push(element.value);
+                                element.remove();
+                            });
+                        }
+                        
+                        a.innerHTML = empty_arr[0];
+                        b.innerHTML = empty_arr[1];
+                        c.innerHTML = empty_arr[2];
+                        d.innerHTML = empty_arr[3];
+                        
+                        todoDependencies.folders.forEach(function(currentFolder){
+                            if(currentFolder.name == getFolder()){
+                                currentFolder.todos.forEach(function(currentTodo){
+                                    if(currentTodo.todoId == id ){
+                                        currentTodo.title = empty_arr[0];
+                                        currentTodo.description = empty_arr[1];
+                                        currentTodo.dueDate = empty_arr[2];
+                                        currentTodo.priority = empty_arr[3];
+                                    }
+                                })
+                            }
+                        })
+                    
+                    btn.innerHTML = "EDIT";
+                    onEdit = false;
+                    currentId = isNaN;
+                    btn.classList.remove("edit"); 
+                }
+            }
+        console.log("onEdit: "+onEdit);
+        console.log("current ID: "+currentId);
 }
 
 right_panel.appendChild(add_todo_btn);
-export { createinitPage, appendFolder,appendTodos,clearDisplay,appendEditTodo};
+
+export { createinitPage, appendFolder,appendTodos,clearDisplay,appendEditTodo,currentId};

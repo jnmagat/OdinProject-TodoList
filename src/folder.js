@@ -28,7 +28,12 @@ function setFolder(folder_name){
 }
 
 function getFolder(){
-    return selected_folder;
+    if(isNaN && !selected_folder){
+        return "Default";
+    }
+    else if(selected_folder){
+        return selected_folder;
+    }
 }
 
 function checkFolder(folder_name){
