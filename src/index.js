@@ -14,6 +14,7 @@ let todoDependencies = (function(){
     }
 
 })()
+
     
 createTodo(
     'Title Test',
@@ -22,7 +23,6 @@ createTodo(
     1
 );
 createinitPage();
-
 
 
 // console.log(todoDependencies.folders);

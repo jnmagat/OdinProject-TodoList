@@ -16,6 +16,8 @@ sidebar_title.setAttribute("class","projects_title");
 let project_list = document.createElement("ul");
 project_list.setAttribute("class","project_list");
 
+// let todo_container = document.createElement("div");
+// todo_container.setAttribute("class","todo_container");
 let todo_table = document.createElement("table");
 todo_table.setAttribute("class","todo_list");
 
@@ -77,6 +79,7 @@ const createinitPage = () =>{
     left_panel.appendChild(sidebar_title);
     left_panel.appendChild(project_list);
 
+    // right_panel.appendChild(todo_container);
     right_panel.appendChild(todo_table);
     todo_table.appendChild(todo_thead);
     todo_thead.appendChild(th_thead_row);
@@ -104,6 +107,7 @@ const createinitPage = () =>{
         }
         
         default_project_list_item.addEventListener('click',function(){
+            default_project_list_item.classList.toggle("selected");
             if(current_loaded_todos != default_project_list_item.innerHTML){
                 setFolder(default_project_list_item.innerHTML);
                 clearDisplay();
@@ -144,30 +148,29 @@ function clearDisplay(){
 }
 
 function appendFolder(folder_name){
-        // if(checkFolder(folder_name)==0){
-
-        // }
-        // else{
             let newFolder = new Folder(folder_name);
             createFolder(newFolder);
             let project_list_item = document.createElement("li");
-            project_list_item.setAttribute("id","project");
+            project_list_item.setAttribute("class","project");
             project_list_item.innerHTML = folder_name;
             project_list.appendChild(project_list_item);
             project_list_item.addEventListener('click',function(){
+                    project_list_item.classList.toggle("selected");
                     setFolder(project_list_item.innerHTML);
                     clearDisplay();
                     appendTodos(project_list_item.innerHTML);
                     current_loaded_todos = project_list_item.innerHTML;
             });
-        // }
-        
+
+        localStorage.setItem('Folders',JSON.stringify(todoDependencies.folders));       
 
 }
 
 
 function appendTodos(folder_name){
     
+    localStorage.setItem('Folders',JSON.stringify(todoDependencies.folders));     
+
     onEdit = false;
     currentId = isNaN;
     
@@ -247,7 +250,7 @@ function appendTodos(folder_name){
                 });            
         }
     }); 
-    // console.log(todoDependencies.folders);
+    // console.log(todoDependencies.folders); 
 } 
 
 function appendEditTodo(btn,id){
